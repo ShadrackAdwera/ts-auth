@@ -2,7 +2,7 @@
 
 ## The Idea
 
-- Provide users with an access token and a refresh upon authentication. 
+- Provide users with an access token and a refresh token upon authentication. 
 - On the React App (later on though), request for a new access token using the refresh token once the current one is expired, instead of autologging the user out.
 - Blacklist refresh tokens for whatever reason.
 - Honourable Mention: Password change logic.
