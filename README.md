@@ -3,9 +3,9 @@
 ## The Idea
 
 - Provide users with an access token and a refresh upon authentication. 
-- On the React App (later on though), request for a new access once the current one is expired, instead of autologging the user out.
+- On the React App (later on though), request for a new access token using the refresh token once the current one is expired, instead of autologging the user out.
 - Blacklist refresh tokens for whatever reason.
-- Honouralble Mention: Password change logic.
+- Honourable Mention: Password change logic.
 
 ## Technologies Used
 - MongoDB - It has always been NoSQL and this is the best to ever do it.
