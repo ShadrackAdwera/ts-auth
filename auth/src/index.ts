@@ -15,6 +15,7 @@ const start = async() => {
     try {
         await mongoose.connect(process.env.MONGO_URI!);
         app.listen(5000);
+        console.log('Connected to Auth Service, Listening on PORT: 5000');
     } catch (error) {
         console.log(error);
         throw new HttpError('An error occured', 500);
