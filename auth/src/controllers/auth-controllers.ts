@@ -85,3 +85,5 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({message: 'Login Successful', user: { id: foundUser.id, email: foundUser.email, token: accessToken }});
 
  }
+
+ export { signUp, login };
