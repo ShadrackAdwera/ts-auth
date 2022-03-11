@@ -2,6 +2,7 @@ import { HttpError } from '@adwesh/common';
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
+import brypto from 'crypto';
 
 import { User } from '../models/User';
 import { generateAccessTokens } from '../utils/generatetokens';
@@ -32,7 +33,7 @@ const signUp = async(req: Request, res: Response, next: NextFunction) => {
         return next(new HttpError('An error occured, try again', 500));
     }
     const newUser = new User({
-        username, email, password: hashedPassword
+        username, email, password: hashedPassword, resetToken: null, tokenExpiration: undefined
     });
     try {
         await newUser.save();
@@ -85,5 +86,36 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({message: 'Login Successful', user: { id: foundUser.id, email: foundUser.email, token: accessToken }});
 
  }
+
+ const requestPasswordReset = async(req: Request, res: Response, next: NextFunction) => {
+     const { email } = req.body;
+     let foundUser;
+
+     try {
+         foundUser = await User.findOne({ email }).exec();
+     } catch (error) {
+        return next(new HttpError('An error occured, try again', 500));
+     }
+     if(!foundUser) {
+        return next(new HttpError('Invalid email', 404));
+     }
+
+     const resetTkn = brypto.randomBytes(64).toString('hex');
+     const tokenExpDate = new Date(new Date().getTime() + 3600000);
+
+     foundUser.resetToken = resetTkn;
+     foundUser.tokenExpiration = tokenExpDate;
+
+     try {
+         await foundUser.save();
+     } catch (error) {
+        return next(new HttpError('An error occured, try again', 500));
+     }
+     console.log(`http://localhost:3000/reset-password/${resetTkn}`);
+
+     //send email with reset link ${frontend_url}/resetToken
+     res.status(200).json({ message: 'Check your email for a reset password link' })
+
+  }
 
  export { signUp, login };
