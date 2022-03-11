@@ -32,5 +32,14 @@ router.post(
   login
 );
 
+router.post(
+  "/reset-password/:resetToken",
+  [
+    body("password").trim().not().isEmpty().isLength({ min: 6 }),
+    body("confirmPassword").trim().not().isEmpty().isLength({ min: 6 })
+  ],
+  login
+);
+
 
 export { router as authRoutes };
