@@ -33,7 +33,7 @@ const signUp = async(req: Request, res: Response, next: NextFunction) => {
         return next(new HttpError('An error occured, try again', 500));
     }
     const newUser = new User({
-        username, email, password: hashedPassword, resetToken: null, tokenExpiration: undefined
+        username, email, password: hashedPassword, resetToken: undefined, tokenExpiration: undefined
     });
     try {
         await newUser.save();
@@ -123,6 +123,44 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
 
   }
 
-  
+  const resetPassword = async(req: Request, res: Response, next: NextFunction) => {
+      const { password, confirmPassword } = req.body;
+      const { resetToken } = req.params;
+
+      let hashedPassword;
+      let foundUser;
+       //check if passwords match
+    if(password !== confirmPassword) {
+        return next(new HttpError('The passwords do not match', 422));
+    }
+
+      try {
+          foundUser = await User.findOne({ resetToken, tokenExpiration: { $gt: new Date() } })
+      } catch (error) {
+        return next(new HttpError('An error occured, try again', 500));
+      }
+
+      if(!foundUser) {
+        return next(new HttpError('Invalid request', 403));
+      }
+
+      try {
+          hashedPassword = await bcrypt.hash(password, 12);
+      } catch (error) {
+        return next(new HttpError('An error occured, try again', 500));
+      }
+      foundUser.password = hashedPassword;
+      foundUser.tokenExpiration = undefined;
+      foundUser.resetToken = undefined;
+
+      try {
+          await foundUser.save();
+      } catch (error) {
+        return next(new HttpError('An error occured, try again', 500));
+      }
+      // invalidate any refresh tokens / access tokens
+      res.status(200).json({ message: 'Your password has been successfully reset' })
+
+   }
 
  export { signUp, login };
