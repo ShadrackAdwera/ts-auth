@@ -88,6 +88,11 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
  }
 
  const requestPasswordReset = async(req: Request, res: Response, next: NextFunction) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return next(new HttpError('Invalid email', 422));
+    }
+
      const { email } = req.body;
      let foundUser;
 
@@ -117,5 +122,7 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
      res.status(200).json({ message: 'Check your email for a reset password link' })
 
   }
+
+  
 
  export { signUp, login };
