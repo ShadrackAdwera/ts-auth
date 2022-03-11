@@ -24,4 +24,13 @@ router.post(
   login
 );
 
+router.post(
+  "/request-reset-token",
+  [
+    body("email").trim().normalizeEmail().isEmail(),
+  ],
+  login
+);
+
+
 export { router as authRoutes };
