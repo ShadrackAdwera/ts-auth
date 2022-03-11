@@ -163,4 +163,4 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
 
    }
 
- export { signUp, login };
+ export { signUp, login, requestPasswordReset, resetPassword };
