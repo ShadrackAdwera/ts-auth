@@ -171,7 +171,7 @@ const generateNewTokens = async(req: Request, res: Response, next: NextFunction)
     const { refreshToken } = req.body;
     const reqUserId = req.user?.userId;
 
-    const { userId, email } = decodeRefreshToken(refreshToken);
+    const { email, userId } = await decodeRefreshToken(refreshToken);
 
     if(userId!==reqUserId) {
         return next(new HttpError('Forbidden request', 403))

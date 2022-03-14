@@ -29,7 +29,7 @@ spec:
                   name: jwt-refreshtoken
                   key: REFRESH_TOKEN_KEY 
             - name: REDIS_HOST
-              value: auth-redis-service
+              value: 'redis://auth-redis-service:6379'
 
 ---
 
