@@ -18,11 +18,16 @@ spec:
           env:
             - name: MONGO_URI
               value: 'mongodb://auth-mongo-service:27017/auth'
-            - name: JWT_KEY
+            - name: ACCESS_TOKEN_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY 
+                  name: jwt-accesstoken
+                  key: ACCESS_TOKEN_KEY
+            - name: REFRESH_TOKEN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-refreshtoken
+                  key: REFRESH_TOKEN_KEY 
 
 ---
 
