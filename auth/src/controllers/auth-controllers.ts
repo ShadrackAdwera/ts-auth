@@ -42,8 +42,8 @@ const signUp = async(req: Request, res: Response, next: NextFunction) => {
         return next(new HttpError('An error occured, try again', 500));
     }
     try {
-        accessToken = generateAccessTokens(newUser);
-        refreshToken = generateRefreshTokens(newUser);
+        accessToken = generateAccessTokens({ id: newUser.id, email: newUser.email });
+        refreshToken = generateRefreshTokens({ id: newUser.id, email: newUser.email });
     } catch (error) {
         return next(new HttpError('An error occured, try again', 500));
     }
@@ -82,8 +82,8 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
     }
 
     try {
-        accessToken = generateAccessTokens(foundUser);
-        refreshToken = generateRefreshTokens(foundUser);
+        accessToken = generateAccessTokens({ id: foundUser.id, email: foundUser.email });
+        refreshToken = generateRefreshTokens({ id: foundUser.id, email: foundUser.email });
     } catch (error) {
         return next(new HttpError('An error occured, try again', 500));
     }
@@ -167,4 +167,12 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
 
    }
 
- export { signUp, login, requestPasswordReset, resetPassword };
+const generateNewTokens = async(req: Request, res: Response, next: NextFunction) => {
+    const { refreshToken } = req.body;
+    let isUser;
+
+
+
+}
+
+ export { signUp, login, requestPasswordReset, resetPassword, generateNewTokens };
