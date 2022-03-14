@@ -1,6 +1,6 @@
 import { createClient, RedisClientType } from 'redis';
 
-export class RedisClient {
+class RedisClient {
     private _client?: RedisClientType;
 
     get client() {
@@ -24,3 +24,5 @@ export class RedisClient {
     }
 
 }
+
+export const initRedis = new RedisClient();
