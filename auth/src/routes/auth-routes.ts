@@ -1,7 +1,8 @@
 import { body } from "express-validator";
+import { checkAuth } from "@adwesh/common";
 import express from "express";
 
-import { signUp, login } from "../controllers/auth-controllers";
+import { signUp, login, requestPasswordReset, resetPassword, generateNewTokens } from "../controllers/auth-controllers";
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.post(
   [
     body("email").trim().normalizeEmail().isEmail(),
   ],
-  login
+  requestPasswordReset
 );
 
 router.post(
@@ -38,8 +39,13 @@ router.post(
     body("password").trim().not().isEmpty().isLength({ min: 6 }),
     body("confirmPassword").trim().not().isEmpty().isLength({ min: 6 })
   ],
-  login
+  resetPassword
 );
+
+router.use(checkAuth);
+router.post('/refresh-token',[
+  body('accessToken').trim().not().isEmpty()
+], generateNewTokens);
 
 
 export { router as authRoutes };
