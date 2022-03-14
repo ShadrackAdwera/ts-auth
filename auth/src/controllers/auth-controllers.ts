@@ -182,4 +182,5 @@ const generateNewTokens = async(req: Request, res: Response, next: NextFunction)
     res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
 }
 
+
  export { signUp, login, requestPasswordReset, resetPassword, generateNewTokens };
