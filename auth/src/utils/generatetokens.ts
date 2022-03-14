@@ -1,9 +1,14 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 interface UserDoc {
    id: string;
    email: string;
 }
+
+interface JwtPayloadProps extends JwtPayload {
+    userId: string;
+    email: string;
+  }
 
 
 export const generateAccessTokens = (user: UserDoc) => {
@@ -12,4 +17,8 @@ export const generateAccessTokens = (user: UserDoc) => {
 
 export const generateRefreshTokens = (user: UserDoc) => {
     return jwt.sign({ userId: user.id, email: user.email }, process.env.REFRESH_TOKEN_KEY!, { audience: user.id, expiresIn: '1y' });
+}
+
+export const decodeRefreshToken = (token:string) => {
+    return jwt.verify(token, process.env.REFRESH_TOKEN_KEY!) as JwtPayloadProps;
 }
