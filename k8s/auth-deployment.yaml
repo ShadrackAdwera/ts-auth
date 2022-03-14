@@ -28,6 +28,8 @@ spec:
                 secretKeyRef:
                   name: jwt-refreshtoken
                   key: REFRESH_TOKEN_KEY 
+            - name: REDIS_HOST
+              value: auth-redis-service
 
 ---
 
