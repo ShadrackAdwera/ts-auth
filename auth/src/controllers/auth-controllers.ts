@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import brypto from 'crypto';
 
 import { User } from '../models/User';
-import { generateAccessTokens, generateRefreshTokens } from '../utils/generatetokens';
+import { generateAccessTokens, generateRefreshTokens, decodeRefreshToken } from '../utils/generatetokens';
 
 const signUp = async(req: Request, res: Response, next: NextFunction) => {
     const error = validationResult(req);
@@ -169,10 +169,17 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
 
 const generateNewTokens = async(req: Request, res: Response, next: NextFunction) => {
     const { refreshToken } = req.body;
-    let isUser;
+    const reqUserId = req.user?.userId;
 
+    const { userId, email } = decodeRefreshToken(refreshToken);
 
+    if(userId!==reqUserId) {
+        return next(new HttpError('Forbidden request', 403))
+    }
+    const newAccessToken = generateAccessTokens({ id: userId, email });
+    const newRefreshToken = generateRefreshTokens({ id: userId, email });
 
+    res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
 }
 
  export { signUp, login, requestPasswordReset, resetPassword, generateNewTokens };
