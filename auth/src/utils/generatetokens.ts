@@ -9,9 +9,9 @@ interface UserDoc extends Document {
 }
 
 export const generateAccessTokens = (user: UserDoc) => {
-    return jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_KEY!, { audience: user.id, expiresIn: '1m' });
+    return jwt.sign({ userId: user.id, email: user.email }, process.env.ACCESS_TOKEN_KEY!, { audience: user.id, expiresIn: '1m' });
 }
 
 export const generateRefreshTokens = (user: UserDoc) => {
-    return jwt.sign({ userId: user.id, email: user.email }, process.env.ACCESS_TOKEN_KEY!, { audience: user.id, expiresIn: '1y' });
+    return jwt.sign({ userId: user.id, email: user.email }, process.env.REFRESH_TOKEN_KEY!, { audience: user.id, expiresIn: '1y' });
 }

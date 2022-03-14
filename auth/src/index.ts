@@ -4,8 +4,12 @@ import mongoose from 'mongoose';
 import { app } from './app';
 
 const start = async() => {
-    if(!process.env.JWT_KEY) {
-        throw new HttpError('JWT must be defined', 400);
+    if(!process.env.ACCESS_TOKEN_KEY) {
+        throw new HttpError('ACCESS_TOKEN_KEY must be defined', 400);
+    }
+
+    if(!process.env.REFRESH_TOKEN_KEY) {
+        throw new HttpError('REFRESH_TOKEN_KEY must be defined', 400);
     }
 
     if(!process.env.MONGO_URI) {
