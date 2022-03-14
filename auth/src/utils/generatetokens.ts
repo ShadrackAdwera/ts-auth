@@ -1,12 +1,10 @@
 import jwt from 'jsonwebtoken';
-import { Document } from 'mongoose';
 
-interface UserDoc extends Document {
-    username: string;
-    email: string;
-    password: string;
-    version: number;
+interface UserDoc {
+   id: string;
+   email: string;
 }
+
 
 export const generateAccessTokens = (user: UserDoc) => {
     return jwt.sign({ userId: user.id, email: user.email }, process.env.ACCESS_TOKEN_KEY!, { audience: user.id, expiresIn: '1m' });
