@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import brypto from 'crypto';
 
 import { User } from '../models/User';
-import { generateAccessTokens } from '../utils/generatetokens';
+import { generateAccessTokens, generateRefreshTokens } from '../utils/generatetokens';
 
 const signUp = async(req: Request, res: Response, next: NextFunction) => {
     const error = validationResult(req);
@@ -17,6 +17,7 @@ const signUp = async(req: Request, res: Response, next: NextFunction) => {
     let foundUser;
     let hashedPassword;
     let accessToken;
+    let refreshToken;
 
     try {
         foundUser = await User.findOne({email}).exec();
@@ -42,10 +43,11 @@ const signUp = async(req: Request, res: Response, next: NextFunction) => {
     }
     try {
         accessToken = generateAccessTokens(newUser);
+        refreshToken = generateRefreshTokens(newUser);
     } catch (error) {
         return next(new HttpError('An error occured, try again', 500));
     }
-    res.status(201).json({message: 'Login Successful', user: { id: newUser.id, email: newUser.email, token: accessToken }});
+    res.status(201).json({message: 'Login Successful', user: { id: newUser.id, email: newUser.email, token: accessToken, refreshToken }});
 }
 
 const login = async(req: Request, res: Response, next: NextFunction) => {
@@ -58,6 +60,7 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
     let foundUser;
     let isPassword;
     let accessToken;
+    let refreshToken;
 
     try {
         foundUser = await User.findOne({email}).exec();
@@ -80,10 +83,11 @@ const login = async(req: Request, res: Response, next: NextFunction) => {
 
     try {
         accessToken = generateAccessTokens(foundUser);
+        refreshToken = generateRefreshTokens(foundUser);
     } catch (error) {
         return next(new HttpError('An error occured, try again', 500));
     }
-    res.status(200).json({message: 'Login Successful', user: { id: foundUser.id, email: foundUser.email, token: accessToken }});
+    res.status(200).json({message: 'Login Successful', user: { id: foundUser.id, email: foundUser.email, token: accessToken, refreshToken }});
 
  }
 
