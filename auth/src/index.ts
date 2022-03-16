@@ -17,13 +17,14 @@ const start = async() => {
         throw new HttpError('MONGO_URI must be defined', 400);
     }
 
-    if(!process.env.REDIS_HOST) {
-        throw new HttpError('REDIS_HOST must be defined', 400);
+    if(!process.env.REDIS_URL) {
+        throw new HttpError('REDIS_URL must be defined', 400);
     }
 
     try {
+        console.log(process.env.REDIS_URL);
         await mongoose.connect(process.env.MONGO_URI!);
-        await initRedis.connect(process.env.REDIS_HOST!);
+        await initRedis.connect(process.env.REDIS_URL!);
         initRedis.client.on('ready',()=>{
             console.log('REDIS is ready to use . . . ');
         });
