@@ -32,6 +32,7 @@ export const generateRefreshTokens = async (user: UserDoc) => {
     await initRedis.client.set(id, accessToken, { EX: 31536000 });
     return accessToken;
   } catch (error) {
+    console.log(error);
     throw new HttpError('An error occured', 500);
   }
 };

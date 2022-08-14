@@ -16,7 +16,7 @@ const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new HttpError('MONGO_URI must be defined', 400);
   }
-
+  console.log(process.env.REDIS_URL);
   if (!process.env.REDIS_URL) {
     throw new HttpError('REDIS_URL must be defined', 400);
   }

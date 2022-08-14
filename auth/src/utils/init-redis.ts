@@ -11,7 +11,13 @@ class RedisClient {
   }
 
   connect(url: string): Promise<void> {
-    this._client = createClient({ url });
+    console.log(url);
+    this._client = createClient({
+      socket: {
+        host: 'auth-redis-service',
+        port: 6379,
+      },
+    });
     return this.client
       .connect()
       .then(() => {

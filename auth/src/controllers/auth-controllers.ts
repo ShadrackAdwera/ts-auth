@@ -54,7 +54,7 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
       id: newUser.id,
       email: newUser.email,
     });
-    refreshToken = generateRefreshTokens({
+    refreshToken = await generateRefreshTokens({
       id: newUser.id,
       email: newUser.email,
     });
@@ -108,7 +108,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       id: foundUser.id,
       email: foundUser.email,
     });
-    refreshToken = generateRefreshTokens({
+    refreshToken = await generateRefreshTokens({
       id: foundUser.id,
       email: foundUser.email,
     });
@@ -229,12 +229,14 @@ const generateNewTokens = async (
     return next(new HttpError('Forbidden request', 403));
   }
   const newAccessToken = generateAccessTokens({ id: userId, email });
-  const newRefreshToken = generateRefreshTokens({ id: userId, email });
+  const newRefreshToken = await generateRefreshTokens({ id: userId, email });
 
   res
     .status(200)
     .json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
 };
+
+//implement logout route to delete refresh tokens from redis
 
 export {
   signUp,
