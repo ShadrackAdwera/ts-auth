@@ -22,7 +22,6 @@ const start = async () => {
   }
 
   try {
-    console.log(process.env.REDIS_URL);
     await mongoose.connect(process.env.MONGO_URI!);
     await initRedis.connect(process.env.REDIS_URL!);
 
